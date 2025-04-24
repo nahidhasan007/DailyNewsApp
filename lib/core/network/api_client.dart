@@ -20,15 +20,14 @@ class ApiClient {
       responseHeader: true,
       error: true
     ));
-
-    Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
-      try {
-        final response = await _dio.get(path, queryParameters: queryParameters);
-        return response;
-      }
-      catch(e) {
-        rethrow;
-      }
+  }
+  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _dio.get(path, queryParameters: queryParameters);
+      return response;
+    }
+    catch(e) {
+      rethrow;
     }
   }
 }
