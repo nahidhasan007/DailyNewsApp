@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:newsapp/presentation/screens/login_screen.dart';
 
 import 'core/bindings/initial_binding.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialBinding: InitialBinding(),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginScreen(),
     );
   }
 }
