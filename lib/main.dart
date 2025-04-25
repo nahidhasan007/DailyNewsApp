@@ -2,12 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsapp/presentation/screens/login_screen.dart';
+import 'package:newsapp/presentation/theme/app_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/bindings/initial_binding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -17,10 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'News App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: AppTheme.lightTheme,
       initialBinding: InitialBinding(),
+      debugShowCheckedModeBanner: false,
       home: LoginScreen(),
     );
   }
