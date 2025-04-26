@@ -13,7 +13,7 @@ import '../screens/search_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(

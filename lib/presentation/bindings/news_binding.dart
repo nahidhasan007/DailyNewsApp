@@ -9,6 +9,13 @@ import '../controllers/news_controller.dart';
 class NewsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NewsController>(() => NewsController(Get.find<NewsRepository>() as GetTopHeadlinesUseCase), fenix: true);
+    Get.lazyPut<GetTopHeadlinesUseCase>(
+      () => GetTopHeadlinesUseCase(Get.find<NewsRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<NewsController>(
+      () => NewsController(Get.find<GetTopHeadlinesUseCase>()),
+      fenix: true,
+    );
   }
 }

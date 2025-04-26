@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:newsapp/presentation/routes/app_pages.dart';
+import 'package:newsapp/presentation/routes/app_routes.dart';
 import 'package:newsapp/presentation/screens/login_screen.dart';
+import 'package:newsapp/presentation/screens/news_feed_home_screen.dart';
 import 'package:newsapp/presentation/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,9 +23,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'News App',
       theme: AppTheme.lightTheme,
+      initialRoute: Routes.LOGIN,
+      getPages: AppPages.routes,
       initialBinding: InitialBinding(),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
     );
   }
 }
