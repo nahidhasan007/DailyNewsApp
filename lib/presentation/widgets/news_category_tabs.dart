@@ -27,24 +27,25 @@ class CategoryTabs extends StatelessWidget {
 
     return Container(
       height: 48,
-      child: Obx(() => ListView.builder(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         padding: EdgeInsets.symmetric(horizontal: 16),
         itemBuilder: (context, index) {
           final category = categories[index];
-          final isSelected = selectedCategory.value == category['value'];
-
           return Padding(
             padding: EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(category['name']!),
-              selected: isSelected,
-              onSelected: (_) => onCategorySelected(category['value']!),
-            ),
+            child: Obx(() {
+              final isSelected = selectedCategory.value == category['value'];
+              return ChoiceChip(
+                label: Text(category['name']!),
+                selected: isSelected,
+                onSelected: (_) => onCategorySelected(category['value']!),
+              );
+            }),
           );
         },
-      )),
+      ),
     );
   }
 }

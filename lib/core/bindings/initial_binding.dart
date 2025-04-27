@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsapp/presentation/controllers/news_controller.dart';
+import 'package:newsapp/presentation/controllers/search_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domainlayer/repostories/auth_repository.dart';
@@ -28,5 +30,6 @@ class InitialBinding extends Bindings {
     Get.lazyPut<NewsController>(() => NewsController(Get.find()), fenix: true);
 
     Get.lazyPut<AuthController>(() => AuthController(Get.find()), fenix: true);
+    Get.lazyPut<NewsSearchController>(() => NewsSearchController(Get.find()), fenix: true);
   }
 }
