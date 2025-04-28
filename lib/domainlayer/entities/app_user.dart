@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+part 'app_user.g.dart';
+
 @HiveType(typeId: 2)
 class AppUser extends HiveObject {
   @HiveField(0)

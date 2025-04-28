@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:newsapp/domainlayer/entities/app_user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert'; // for utf8
@@ -33,7 +34,7 @@ class AuthRepositoryImpl implements AuthRepository {
       });
 
       _currentUserId = newUserRef.key;
-      return AuthUser(uid: _currentUserId!, email: email); // Custom User class
+      return AuthUser(uid: _currentUserId!, email: email);
     } catch (e) {
       throw e;
     }
@@ -63,6 +64,21 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> signOut() async {
     _currentUserId = null;
+  }
+
+  @override
+  Future<bool> isUserLoggedIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final loggedIn = prefs.getBool('isLoggedIn') ?? false;
+    print('Checked login state: $loggedIn');
+    return loggedIn;
+  }
+
+  @override
+  Future<void> saveLoginState(bool isLoggedIn) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', isLoggedIn);
+    print('Saved login state: $isLoggedIn');
   }
 }
 

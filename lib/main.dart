@@ -1,6 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:newsapp/domainlayer/entities/app_user.dart';
+import 'package:newsapp/domainlayer/entities/bookmark.dart';
 import 'package:newsapp/presentation/routes/app_pages.dart';
 import 'package:newsapp/presentation/routes/app_routes.dart';
 import 'package:newsapp/presentation/screens/login_screen.dart';
@@ -9,10 +13,16 @@ import 'package:newsapp/presentation/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/bindings/initial_binding.dart';
+import 'domainlayer/entities/articles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(ArticleAdapter());
+  Hive.registerAdapter(BookmarkAdapter());
+  Hive.registerAdapter(AppUserAdapter());
+  await Hive.openBox<List<Article>>('articlesBox');
   runApp(const MyApp());
 }
 

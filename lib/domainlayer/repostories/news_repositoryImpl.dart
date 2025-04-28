@@ -1,3 +1,6 @@
+import 'package:hive/hive.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import '../../core/constants/api_constants.dart';
 import '../../core/network/api_client.dart';
 import '../entities/articleModel.dart';
@@ -16,11 +19,15 @@ class NewsRepositoryImpl implements NewsRepository {
     int page = 1,
   }) async {
     try {
-      final queryParams = {
-        'country': country,
-        'page': page,
-        'pageSize': 20,
-      };
+      final internetConnectionChecker =
+          InternetConnectionChecker.createInstance();
+      bool isConnected = await internetConnectionChecker.hasConnection;
+
+      // if (!isConnected) {
+      //   return await getSavedHeadlines();
+      // }
+
+      final queryParams = {'country': country, 'page': page, 'pageSize': 20};
 
       if (category.isNotEmpty) {
         queryParams['category'] = category;
@@ -33,13 +40,34 @@ class NewsRepositoryImpl implements NewsRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> articlesJson = response.data['articles'];
-        return articlesJson.map((json) => ArticleModel.fromJson(json)).toList();
+        List<Article> articles =
+            articlesJson.map((json) => Article.fromJson(json)).toList();
+        final box = await Hive.openBox<List<Article>>('articlesBox');
+        await box.put(
+          'topHeadlines',
+          articles,
+        ); // Save articles under the key 'topHeadlines'
+
+        return articles;
       } else {
         throw Exception('Failed to load top headlines');
       }
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<List<Article>> getSavedHeadlines() async {
+    final box = await Hive.openBox<List<Article>>('articlesBox');
+    List<Article>? articles = box.get('topHeadlines');
+
+    // If articles exist in Hive
+    if (articles != null) {
+      return articles;
+    }
+
+    // If no articles are saved, return an empty list
+    return [];
   }
 
   @override

@@ -35,7 +35,7 @@ class ArticleDetailsPage extends GetView<BookmarkController> {
                         ? Colors.yellow[700]
                         : null,
               ),
-              onPressed: () => controller.toggleBookmark(article),
+              onPressed: () => controller.saveArticleToFirebase(article),
             ),
           ),
         ],

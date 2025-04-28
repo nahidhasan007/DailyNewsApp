@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:newsapp/presentation/controllers/news_controller.dart';
 import 'package:newsapp/presentation/controllers/search_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domainlayer/repostories/auth_repository.dart';
 import '../../domainlayer/repostories/auth_repository_impl.dart';
@@ -22,14 +20,26 @@ class InitialBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => ApiClient(), fenix: true);
-    Get.lazyPut<NewsRepository>(() => NewsRepositoryImpl(Get.find()), fenix: true);
+    Get.lazyPut<NewsRepository>(
+      () => NewsRepositoryImpl(Get.find()),
+      fenix: true,
+    );
     Get.lazyPut<AuthRepository>(() => AuthRepositoryImpl(), fenix: true);
-    Get.lazyPut<BookmarkRepository>(() => BookmarkRepositoryImpl(), fenix: true);
+    Get.lazyPut<BookmarkRepository>(
+      () => BookmarkRepositoryImpl(),
+      fenix: true,
+    );
 
-    Get.lazyPut<GetTopHeadlinesUseCase>(() => GetTopHeadlinesUseCase(Get.find()), fenix: true); // <-- moved up
+    Get.lazyPut<GetTopHeadlinesUseCase>(
+      () => GetTopHeadlinesUseCase(Get.find()),
+      fenix: true,
+    ); // <-- moved up
     Get.lazyPut<NewsController>(() => NewsController(Get.find()), fenix: true);
 
     Get.lazyPut<AuthController>(() => AuthController(Get.find()), fenix: true);
-    Get.lazyPut<NewsSearchController>(() => NewsSearchController(Get.find()), fenix: true);
+    Get.lazyPut<NewsSearchController>(
+      () => NewsSearchController(Get.find()),
+      fenix: true,
+    );
   }
 }
