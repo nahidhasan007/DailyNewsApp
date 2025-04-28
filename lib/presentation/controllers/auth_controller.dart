@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../../domainlayer/repostories/auth_repository.dart';
+import '../routes/app_routes.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository;
@@ -16,10 +19,10 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    user.value = _authRepository.getCurrentUser();
-    _authRepository.userStream.listen((User? newUser) {
-      user.value = newUser;
-    });
+    // user.value = _authRepository.getCurrentUser();
+    // _authRepository.userStream.listen((User? newUser) {
+    //   user.value = newUser;
+    // });
   }
 
   bool get isLoggedIn => user.value != null;
@@ -30,6 +33,7 @@ class AuthController extends GetxController {
       errorMessage.value = '';
 
       await _authRepository.signIn(email, password);
+      Get.offAllNamed(Routes.HOME);
     } on FirebaseAuthException catch (e) {
       _handleAuthError(e);
     } catch (e) {
@@ -45,6 +49,7 @@ class AuthController extends GetxController {
       errorMessage.value = '';
 
       await _authRepository.signUp(email, password);
+      Get.offAllNamed(Routes.LOGIN);
     } on FirebaseAuthException catch (e) {
       _handleAuthError(e);
     } catch (e) {

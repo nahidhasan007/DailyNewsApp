@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:newsapp/domainlayer/entities/app_user.dart';
 
 abstract class AuthRepository {
-  Future<User?> signIn(String email, String password);
-  Future<User?> signUp(String email, String password);
+  Future<AuthUser?> signIn(String email, String password);
+  Future<AuthUser?> signUp(String email, String password);
   Future<void> signOut();
-  User? getCurrentUser();
-  Stream<User?> get userStream;
 }

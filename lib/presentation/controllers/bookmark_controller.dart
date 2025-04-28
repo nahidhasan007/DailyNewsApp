@@ -1,8 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 import '../../domainlayer/entities/articles.dart';
 import '../../domainlayer/repostories/auth_repository.dart';
@@ -22,7 +18,7 @@ class BookmarkController extends GetxController {
   void onInit() {
     super.onInit();
     // Listen to authentication state changes
-    _authRepository.userStream.listen((user) {
+    /*_authRepository.userStream.listen((user) {
       if (user != null) {
         // User logged in, sync bookmarks and listen to Firestore changes
         _bookmarkRepository.syncBookmarks();
@@ -31,7 +27,7 @@ class BookmarkController extends GetxController {
         // User logged out, load local bookmarks
         loadBookmarks();
       }
-    });
+    });*/
 
     // Initial load
     loadBookmarks();
@@ -53,7 +49,7 @@ class BookmarkController extends GetxController {
 
   void _listenToBookmarks() {
     _bookmarkRepository.getBookmarksStream().listen(
-          (updatedBookmarks) {
+      (updatedBookmarks) {
         bookmarks.value = updatedBookmarks;
       },
       onError: (e) {

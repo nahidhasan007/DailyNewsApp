@@ -98,7 +98,7 @@ class LoginScreen extends GetView<AuthController> {
                                 if (_formKey.currentState!.validate()) {
                                   controller.signIn(
                                     _emailController.text.trim(),
-                                    _passwordController.text,
+                                    _passwordController.text.trim(),
                                   );
                                 }
                               },

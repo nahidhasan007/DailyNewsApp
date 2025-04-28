@@ -17,3 +17,11 @@ class AppUser extends HiveObject {
     this.displayName,
   });
 }
+
+// Create your own lightweight User class
+class AuthUser {
+  final String uid;
+  final String? email;
+
+  AuthUser({required this.uid, this.email});
+}
