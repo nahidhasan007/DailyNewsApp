@@ -17,10 +17,10 @@ class SearchPage extends GetView<NewsSearchController> {
           decoration: InputDecoration(
             hintText: 'Search news...',
             border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.white70),
+            hintStyle: TextStyle(color: Colors.black38),
           ),
-          style: TextStyle(color: Colors.white),
-          cursorColor: Colors.white,
+          style: TextStyle(color: Colors.black38),
+          cursorColor: Colors.blue,
           textInputAction: TextInputAction.search,
           onSubmitted: (value) {
             if (value.isNotEmpty) {
