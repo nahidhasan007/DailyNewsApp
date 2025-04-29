@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:newsapp/domainlayer/entities/articleModel.dart';
 
 import '../../domainlayer/entities/articles.dart';
+import '../../domainlayer/entities/bookmark_article.dart';
 import '../../domainlayer/repostories/auth_repository.dart';
 import '../../domainlayer/repostories/bookmark_repository.dart';
 
@@ -14,43 +14,25 @@ class BookmarkController extends GetxController {
 
   BookmarkController(this._bookmarkRepository, this._authRepository);
 
-  final RxList<Article> bookmarks = <Article>[].obs;
+  final RxList<BookmarkArticleModel> bookmarks = <BookmarkArticleModel>[].obs;
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Listen to authentication state changes
-    /*_authRepository.isUserLoggedIn();
-    _authRepository.isUserLoggedIn(); {
-      if (user != null) {
-        // User logged in, sync bookmarks and listen to Firestore changes
-        _bookmarkRepository.syncBookmarks();
-        _listenToBookmarks();
-      } else {
-        // User logged out, load local bookmarks
-        loadBookmarks();
-      }
-    })*/
-
     // Initial load
     getArticlesFromFirebase();
-    loadBookmarks();
   }
 
 
   Future<void> saveArticleToFirebase(Article article) async {
     final DatabaseReference dbRef = FirebaseDatabase.instance.ref('bookmarks');
-
-    // Create a new reference for the article
     DatabaseReference newArticleRef = dbRef.push();
-
-    // Convert the article to JSON
-    Map<String, dynamic> articleJson = article.toJson();
+    BookmarkArticleModel bookmark = BookmarkArticleModel.fromArticle(article);
+    Map<String, dynamic> articleJson = bookmark.toJson();
 
     try {
-      // Save the article data to Firebase Realtime Database
       await newArticleRef.set(articleJson);
 
       print("Article saved successfully!");
@@ -61,27 +43,21 @@ class BookmarkController extends GetxController {
   }
 
 
-  Future<List<Article>> getArticlesFromFirebase() async {
-    List<Article> articles = [];
+  Future<List<BookmarkArticleModel>> getArticlesFromFirebase() async {
+    List<BookmarkArticleModel> articles = [];
 
     try {
       final snapshot = await _dbRef.child('bookmarks').get();
-      print('Fetched data: ${snapshot.value}'); // Log the fetched raw data
+      print('Fetched data: ${snapshot.value}');
 
-      // Check if data exists
       if (snapshot.exists) {
-        Map<Object?, Object?> articlesMap = snapshot.value as Map<Object?, Object?>;
-
-        // Log the articlesMap structure to see the exact format
-        print('Articles map structure: $articlesMap');
-
-        articlesMap.forEach((key, value) {
-          // Safely cast the value to a Map<String, dynamic> before passing to Article.fromJson
-          if (value is Map<String, dynamic>) {
-            print('Processing article with key: $key, value: $value');
-            articles.add(Article.fromJson(value));
-          } else {
-            print('Skipping article with key: $key due to unexpected structure');
+        final articlesRawMap = snapshot.value as Map<Object?, Object?>;
+        articlesRawMap.forEach((key, value) {
+          try {
+            final castedValue = Map<String, dynamic>.from(value as Map);
+            articles.add(BookmarkArticleModel.fromJson(castedValue));
+          } catch (e) {
+            print('Skipping article with key: $key due to error: $e');
           }
         });
 
@@ -93,24 +69,14 @@ class BookmarkController extends GetxController {
       print('Error fetching articles: $e');
     }
 
+    bookmarks.value = articles;
+
     return articles;
   }
 
 
-
-
   Future<void> loadBookmarks() async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final result = await _bookmarkRepository.getBookmarks();
-      bookmarks.value = result;
-    } catch (e) {
-      errorMessage.value = e.toString();
-    } finally {
-      isLoading.value = false;
-    }
+    getArticlesFromFirebase();
   }
 
   void _listenToBookmarks() {

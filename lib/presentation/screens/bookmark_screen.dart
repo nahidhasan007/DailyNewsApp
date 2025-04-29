@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:newsapp/presentation/widgets/bookmark_article_item.dart';
 import 'package:newsapp/presentation/widgets/news_article_item.dart';
 
 import '../controllers/auth_controller.dart';
@@ -119,9 +120,9 @@ class BookmarksPage extends GetView<BookmarkController> {
                 ),
               ),
               onDismissed: (_) {
-                controller.toggleBookmark(article);
+                // controller.toggleBookmark(article);
               },
-              child: ArticleItem(
+              child: BookmarkArticleItem(
                 article: article,
                 onTap: () => Get.toNamed(
                   '/article-details',
